@@ -68,3 +68,16 @@ func (this *ordersQueue) Delete(o *Order) {
 		this.tail = prev
 	}
 }
+
+func (this *ordersQueue) Peek(index int) *Order {
+	if index < 0 || index >= this.size {
+		return nil
+	}
+
+	current := this.head
+	for i := 0; i < index; i++ {
+		current = current.Next
+	}
+
+	return current
+}
