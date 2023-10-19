@@ -70,6 +70,10 @@ func (this *ordersQueue) Delete(o *Order) {
 }
 
 func (this *ordersQueue) Peek(index int) *Order {
+	if this.size == 0 {
+		return nil
+	}
+
 	if index < 0 || index >= this.size {
 		return nil
 	}
