@@ -22,6 +22,7 @@ func (this *ordersQueue) IsEmpty() bool {
 
 func (this *ordersQueue) Enqueue(o *Order) {
 	tail := this.tail
+	o.Prev = tail
 	this.tail = o
 	if tail != nil {
 		tail.Next = o
@@ -43,6 +44,9 @@ func (this *ordersQueue) Dequeue() *Order {
 	}
 
 	this.head = this.head.Next
+	if this.head != nil {
+		this.head.Prev = nil
+	}
 	this.size--
 	return head
 }
@@ -70,10 +74,6 @@ func (this *ordersQueue) Delete(o *Order) {
 }
 
 func (this *ordersQueue) Peek(index int) *Order {
-	if this.size == 0 {
-		return nil
-	}
-
 	if index < 0 || index >= this.size {
 		return nil
 	}
