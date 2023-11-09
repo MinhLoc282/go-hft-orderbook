@@ -1,6 +1,7 @@
 package hftorderbook
 
 import (
+	"strconv"
 	"testing"
 )
 
@@ -14,7 +15,7 @@ func TestOrdersQueueEmpty(t *testing.T) {
 func TestOrdersQueueEnqueDequeue(t *testing.T) {
 	q := NewOrdersQueue()
 	o := &Order{
-		Id: 1,
+		Id: "1",
 	}
 	q.Enqueue(o)
 	if q.Size() != 1 || q.IsEmpty() {
@@ -23,7 +24,7 @@ func TestOrdersQueueEnqueDequeue(t *testing.T) {
 
 	r := q.Dequeue()
 	if q.Size() != 0 || !q.IsEmpty() {
-		t.Errorf("a queue should be empty now")	
+		t.Errorf("a queue should be empty now")
 	}
 	r2 := q.Dequeue()
 	if r2 != nil {
@@ -36,7 +37,7 @@ func TestOrdersQueueEnqueDequeue(t *testing.T) {
 	q.Enqueue(o)
 	q.Dequeue()
 	if q.Size() != 0 || !q.IsEmpty() {
-		t.Errorf("a queue should be empty now")	
+		t.Errorf("a queue should be empty now")
 	}
 }
 
@@ -44,7 +45,7 @@ func TestOrdersQueueMultiple(t *testing.T) {
 	q := NewOrdersQueue()
 	n := 100
 	for i := 0; i < n; i += 1 {
-		q.Enqueue(&Order{ Id: i })
+		q.Enqueue(&Order{Id: strconv.Itoa(i)})
 	}
 
 	if q.Size() != n {
@@ -53,7 +54,7 @@ func TestOrdersQueueMultiple(t *testing.T) {
 
 	for i := 0; i < n; i += 1 {
 		o := q.Dequeue()
-		if o.Id != i {
+		if o.Id != strconv.Itoa(i) {
 			t.Errorf("order invariant failed")
 			break
 		}
@@ -68,11 +69,11 @@ func TestOrdersQueueMixed(t *testing.T) {
 	q := NewOrdersQueue()
 	n := 100
 	for i := 0; i < n; i += 1 {
-		q.Enqueue(&Order{ Id: i })
+		q.Enqueue(&Order{Id: strconv.Itoa(i)})
 		q.Dequeue()
 	}
 
 	if q.Size() != 0 || !q.IsEmpty() {
-		t.Errorf("a queue should be empty now")	
+		t.Errorf("a queue should be empty now")
 	}
 }

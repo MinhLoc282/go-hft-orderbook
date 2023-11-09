@@ -1,8 +1,9 @@
 package hftorderbook
 
 import (
-	"testing"
 	"math/rand"
+	"strconv"
+	"testing"
 	//"fmt"
 )
 
@@ -20,7 +21,7 @@ func TestIndexMinPQTwo(t *testing.T) {
 	minpq := NewIndexMinPQ(10)
 	minpq.Insert(0, 6.0)
 	minpq.Insert(1, 5.0)
-	
+
 	res := [2]float64{}
 	res[0] = minpq.Top()
 	minpq.DelTop()
@@ -37,7 +38,7 @@ func TestIndexMinPQThree(t *testing.T) {
 	minpq.Insert(0, 6.0)
 	minpq.Insert(1, 5.0)
 	minpq.Insert(2, 4.0)
-	
+
 	res := [3]float64{}
 	res[0] = minpq.Top()
 	minpq.DelTop()
@@ -92,7 +93,7 @@ func BenchmarkIndexMinPQLimitedRandomInsertWithCaching(b *testing.B) {
 	for i := range limitslist {
 		limitslist[i] = rand.Float64()
 	}
-	
+
 	// preallocate empty orders
 	orders := make([]*Order, 0, b.N)
 	for i := 0; i < b.N; i += 1 {
@@ -106,7 +107,7 @@ func BenchmarkIndexMinPQLimitedRandomInsertWithCaching(b *testing.B) {
 	for i := 0; i < b.N; i += 1 {
 		// create a new order
 		o := orders[i]
-		o.Id = i
+		o.Id = strconv.Itoa(i)
 		o.Volume = rand.Float64()
 		// o := &Order{
 		// 	Id: i,
@@ -127,7 +128,7 @@ func BenchmarkIndexMinPQLimitedRandomInsertWithCaching(b *testing.B) {
 
 			// caching limit
 			limitscache[price] = &l
-			
+
 			// inserting into heap
 			pq.Insert(len(limitscache)-1, price)
 		}
