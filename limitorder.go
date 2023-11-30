@@ -59,3 +59,15 @@ func (this *LimitOrder) Clear() {
 func (this *LimitOrder) Peek(index int) *Order {
 	return this.orders.Peek(index)
 }
+
+func (lo *LimitOrder) AddVolume(volumeToAdd float64) {
+	lo.totalVolume += volumeToAdd
+}
+
+func (lo *LimitOrder) SubtractVolume(volumeToSubtract float64) {
+	if lo.totalVolume < volumeToSubtract {
+		panic("volume to subtract exceeds total volume")
+	}
+
+	lo.totalVolume -= volumeToSubtract
+}
