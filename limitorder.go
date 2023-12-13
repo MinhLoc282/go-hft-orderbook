@@ -1,5 +1,7 @@
 package hftorderbook
 
+import "github.com/shopspring/decimal"
+
 // Limit price orders combined as a FIFO queue
 type LimitOrder struct {
 	Price float64
@@ -64,10 +66,12 @@ func (lo *LimitOrder) AddVolume(volumeToAdd float64) {
 	lo.totalVolume += volumeToAdd
 }
 
-func (lo *LimitOrder) SubtractVolume(volumeToSubtract float64) {
-	if lo.totalVolume < volumeToSubtract {
+func (lo *LimitOrder) SubtractVolume(volumeToSubtract decimal.Decimal) {
+	loTotalVolume := decimal.NewFromFloat(lo.totalVolume)
+
+	if loTotalVolume.LessThan(volumeToSubtract) {
 		panic("volume to subtract exceeds total volume")
 	}
 
-	lo.totalVolume -= volumeToSubtract
+	lo.totalVolume, _ = loTotalVolume.Sub(volumeToSubtract).Float64()
 }
