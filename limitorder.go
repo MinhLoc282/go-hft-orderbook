@@ -18,6 +18,12 @@ func NewLimitOrder(price float64) LimitOrder {
 	}
 }
 
+func (lo *LimitOrder) EnqueueBulk(orders []*Order) {
+	for _, order := range orders {
+		lo.Enqueue(order)
+	}
+}
+
 func (this *LimitOrder) TotalVolume() float64 {
 	return this.totalVolume
 }
