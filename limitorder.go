@@ -18,9 +18,11 @@ func NewLimitOrder(price float64) LimitOrder {
 	}
 }
 
-func (lo *LimitOrder) EnqueueBulk(orders []*Order) {
-	for _, order := range orders {
-		lo.Enqueue(order)
+func (this *LimitOrder) EnqueueBulk(orders []*Order) {
+	this.orders.BulkEnqueue(orders)
+	for _, o := range orders {
+		o.Limit = this
+		this.totalVolume += o.Volume
 	}
 }
 

@@ -20,6 +20,27 @@ func (this *ordersQueue) IsEmpty() bool {
 	return this.size == 0
 }
 
+func (this *ordersQueue) BulkEnqueue(orders []*Order) {
+	if len(orders) == 0 {
+		return
+	}
+
+	tail := this.tail
+	if tail != nil {
+		tail.Next = orders[0]
+	} else {
+		this.head = orders[0]
+	}
+
+	for i := 0; i < len(orders)-1; i++ {
+		orders[i].Next = orders[i+1]
+		orders[i+1].Prev = orders[i]
+	}
+
+	this.tail = orders[len(orders)-1]
+	this.size += len(orders)
+}
+
 func (this *ordersQueue) Enqueue(o *Order) {
 	tail := this.tail
 	o.Prev = tail
